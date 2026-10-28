@@ -52,7 +52,7 @@ Configuration:
 | `STUDIO_HOST` | Bind address; defaults to `127.0.0.1`. Containers require `0.0.0.0`. |
 | `PORT` | Listening port; defaults to `8000`. |
 | `STUDIO_DATA_DIR` | Runtime directory; defaults to `.runtime` in the checkout. Keep it private and outside public/static paths. |
-| `STUDIO_PUBLIC_ORIGIN` | Exact externally visible HTTPS origin for a remote deployment, for example `https://your-private-host.example`; no trailing slash or path. Used for origin validation and secure cookies without trusting forwarded headers. |
+| `STUDIO_PUBLIC_ORIGIN` | Optional explicit external HTTPS origin for a custom-domain deployment, for example `https://your-private-host.example`; no trailing slash or path. Takes precedence over Render's automatically provided `RENDER_EXTERNAL_URL`. Used for origin validation and secure cookies without trusting forwarded headers. |
 | `STUDIO_WHISPER_MODEL` | Optional local faster-whisper model directory; no implicit model download. |
 
 ## Temporary media, privacy, and limits
@@ -127,7 +127,9 @@ The app needs one long-running server process with FFmpeg, temporary filesystem 
 
 `render.yaml` supplies an optional single-instance Render Docker blueprint with no persistent disk. It is a template, not a deployed or verified public service. Its free instance is suitable only for assessing small inputs if the provider supports the workload; larger videos or AI will often exceed free memory, CPU, disk, or time limits. Review provider limits and pricing yourself before creating resources. Free software does not guarantee free always-on cloud processing.
 
-For remote access, configure an HTTPS reverse proxy and set `STUDIO_PUBLIC_ORIGIN` to the exact HTTPS origin you will open in your browser, with no trailing slash or path. The app uses that explicit value for origin validation and secure cookies while leaving forwarded-header trust disabled. On Render, enter the service's assigned HTTPS origin in its environment settings after the hostname is known, then restart before use. Do not set a made-up production origin or trust arbitrary client-supplied forwarding headers. Check login, import, preview, export and cleanup through the deployed HTTPS address before treating a host as ready.
+On Render, the app automatically uses the provider's `RENDER_EXTERNAL_URL` for HTTPS origin validation and secure cookies; no hostname needs to be entered before deployment. For another reverse proxy or a custom domain, set `STUDIO_PUBLIC_ORIGIN` to the exact HTTPS origin you open in your browser, with no trailing slash or path. This explicit setting takes precedence over the assigned Render hostname. Forwarded request headers are not trusted. Check login, import, preview, export and cleanup through the actual deployed HTTPS address before treating a host as ready.
+
+Deployment requires an authenticated hosting account. Repository push access alone cannot provision a Render service. For agent-operated deployment, add `RENDER_API_KEY` securely in the cloud environment settings, scoped by the proxy to `api.render.com`; never paste it into chat or commit it. The environment must allow `api.render.com` and the assigned service host. These requirements have been saved in the environment draft, but saving a draft does not apply networking or supply the credential.
 
 ## Appearance
 

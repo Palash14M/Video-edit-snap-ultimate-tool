@@ -148,7 +148,8 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
     jobs = Jobs()
     stop_cleanup = Event()
     history_file = data_dir / 'urls.json'
-    public_origin = os.environ.get('STUDIO_PUBLIC_ORIGIN', '').rstrip('/')
+    public_origin = (os.environ.get('STUDIO_PUBLIC_ORIGIN')
+                     or os.environ.get('RENDER_EXTERNAL_URL', '')).rstrip('/')
     export_reservations = {}
 
     def project_public(p):

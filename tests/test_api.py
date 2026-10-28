@@ -129,6 +129,31 @@ def test_https_reverse_proxy_origin_and_secure_cookie(tmp_path, monkeypatch):
                       headers={'Origin':'https://wrong.example'}).status_code == 403
 
 
+def test_render_assigned_https_url_works_without_manual_origin(tmp_path, monkeypatch):
+    from studio.app import create_app
+    monkeypatch.delenv('STUDIO_PUBLIC_ORIGIN', raising=False)
+    monkeypatch.setenv('RENDER_EXTERNAL_URL', 'https://assigned-short-studio.onrender.com')
+    with TestClient(create_app(tmp_path, password='render-deployment-test-password')) as client:
+        response=client.post('/api/session', json={'password':'render-deployment-test-password'},
+                             headers={'Origin':'https://assigned-short-studio.onrender.com'})
+        assert response.status_code==200
+        assert '; Secure' in response.headers['set-cookie']
+        assert client.post('/api/session',json={'password':'render-deployment-test-password'},
+                           headers={'Origin':'https://attacker.example'}).status_code==403
+
+
+def test_explicit_custom_origin_takes_precedence_over_render_hostname(tmp_path, monkeypatch):
+    from studio.app import create_app
+    monkeypatch.setenv('STUDIO_PUBLIC_ORIGIN', 'https://custom.example')
+    monkeypatch.setenv('RENDER_EXTERNAL_URL', 'https://assigned-short-studio.onrender.com')
+    with TestClient(create_app(tmp_path, password='render-deployment-test-password')) as client:
+        response=client.post('/api/session',json={'password':'render-deployment-test-password'},
+                             headers={'Origin':'https://custom.example'})
+        assert response.status_code==200
+        assert client.post('/api/session',json={'password':'render-deployment-test-password'},
+                           headers={'Origin':'https://assigned-short-studio.onrender.com'}).status_code==403
+
+
 def test_cancellation_releases_worker_and_project_cleanup(client, video):
     from threading import Event
     from studio.media import Cancelled

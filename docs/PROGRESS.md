@@ -61,3 +61,13 @@ TDD and verification: 97 backend tests and 38 subtests passed; Ruff and JavaScri
 Coverage at this milestone: 30 implemented, 62 pending, 25 blocked and 12 scope conflicts, preserving every original requirement. The full product remains incomplete. No paid provider or public deployment has been used; the saved network draft remains unapplied in the running instance.
 
 Final phase-two Docker verification passed against the updated code as unprivileged UID 10001: real source/logo/music/font uploads, branded export, normalized source and output playback, project removal, and feature registry counts. Decoded output measured 1.7 seconds at 320×240 with audio; sampled logo pixels were red, and decoded audio contained both the 440 Hz source and 880 Hz background music. No public deployment was performed.
+
+## Hosted deployment follow-up
+
+The user explicitly requested a final deployed website URL. Actual checks found no Render/Vercel/Netlify/Cloudflare hosting credential or outbound hosting identity; a native Git push does not grant hosting access. GitHub API access returned Forbidden, and a real HTTPS request to `api.render.com` returned proxy policy HTTP 403. No hosted URL has been invented.
+
+Removed a manual Render setup dependency: the app now reads the provider-supplied `RENDER_EXTERNAL_URL` when no explicit custom `STUDIO_PUBLIC_ORIGIN` is configured. Regression tests observed the HTTPS request rejected before the fix and passing afterward, verify Secure cookies and malicious-origin rejection, and preserve explicit custom-domain precedence. The Render blueprint no longer asks for a hostname before that hostname exists.
+
+Saved the missing `RENDER_API_KEY` requirement securely scoped to `api.render.com`, together with the Render API/docs and service-host network destinations. Existing source/model destinations were preserved. Actual deployment is blocked until the user supplies that credential in secure environment settings and the network settings apply; no password or token has been requested in chat, and no paid resource has been created.
+
+A real local container check passed with one CPU and 512 MiB memory, unprivileged UID 10001 and no network: upload, music, bold captions, text/fades, fully decoded 720×1280 and 1080×1920 two-second clips, and project cleanup. Peak memory was approximately 461.4 MiB. This is evidence for small inputs only, with tight memory headroom; it does not establish reliable two-hour input processing or sustained free-tier capacity. The test container was removed afterward.

@@ -15,8 +15,7 @@ services:
         value: 0.0.0.0
       - key: STUDIO_DATA_DIR
         value: /tmp/short-studio
-      # Exact assigned/custom HTTPS origin; configure after hostname is known.
-      - key: STUDIO_PUBLIC_ORIGIN
-        sync: false
+      # Render supplies RENDER_EXTERNAL_URL; app uses it for HTTPS origin/cookies.
+      # For a custom domain only, optionally set STUDIO_PUBLIC_ORIGIN afterward.
       - key: STUDIO_PASSWORD
         generateValue: true
