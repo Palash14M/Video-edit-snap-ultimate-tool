@@ -35,9 +35,9 @@ Official social publishing and analytics require platform application registrati
 
 ## Verified core and remaining work
 
-Current coverage: **22 implemented, 70 pending, 25 blocked, 12 scope conflicts**. These statuses cover the original numbered requirements; additional reliability and security work is not inflated into extra feature counts.
+Current coverage: **30 implemented, 62 pending, 25 blocked, 12 scope conflicts**. These statuses cover the original numbered requirements; additional reliability and security work is not inflated into extra feature counts.
 
-The verified core includes manual segment editing/reordering, real text/caption rendering, aspect-ratio conversion, deterministic audio filtering, silence proposals with owner approval, 720p/1080p output, temporary renaming, upload, clip/ZIP downloads, and private editing/metadata/export APIs. Scene-cut detection, preview normalization, cancellation, resource limits and temporary cleanup support that workflow. They do not establish that semantic AI, generative media, all imports or social integrations work.
+The verified core includes manual segment editing/reordering, real text/caption rendering, aspect-ratio conversion, deterministic audio filtering, silence proposals with owner approval, 720p/1080p output, temporary renaming, upload, clip/ZIP downloads, and private editing/metadata/export APIs. The next verified stage adds short segment fades, temporary logo/music/font uploads, looped/mixed background music, caption font/colors and corner logos. Actual rendered pixels, decoded audio and browser workflows verify the output. Scene-cut detection, preview normalization, cancellation, resource limits and temporary cleanup support that workflow. They do not establish that semantic AI, generative media, all imports or social integrations work.
 
 Tests and source-level evidence are recorded in each implemented entry of `features.json`. The application exposes this same registry so unfinished work stays visible.
 
@@ -72,10 +72,10 @@ Machine-readable detail, including dependencies and conflict notes, is in [featu
 | 23 | Scene Reordering | AI VIDEO CLIPPING & EDITING | implemented |
 | 24 | Scene Extension | AI VIDEO CLIPPING & EDITING | pending |
 | 25 | Automatic Hook Generation | AI VIDEO CLIPPING & EDITING | pending |
-| 26 | Video Transition Effects | AI VIDEO CLIPPING & EDITING | pending |
+| 26 | Video Transition Effects | AI VIDEO CLIPPING & EDITING | implemented |
 | 27 | Custom Text Overlays | AI VIDEO CLIPPING & EDITING | implemented |
-| 28 | Custom Media Asset Uploads | AI VIDEO CLIPPING & EDITING | pending |
-| 29 | Background Music Integration | AI VIDEO CLIPPING & EDITING | pending |
+| 28 | Custom Media Asset Uploads | AI VIDEO CLIPPING & EDITING | implemented |
+| 29 | Background Music Integration | AI VIDEO CLIPPING & EDITING | implemented |
 | 30 | AI B-Roll Generation | AI VIDEO CLIPPING & EDITING | blocked |
 | 31 | Stock B-Roll Integration | AI VIDEO CLIPPING & EDITING | blocked |
 | 32 | AI Video B-Roll | AI VIDEO CLIPPING & EDITING | blocked |
@@ -98,14 +98,14 @@ Machine-readable detail, including dependencies and conflict notes, is in [featu
 | 49 | Multilingual Speech Transcription | AI CAPTIONS & SUBTITLES | blocked |
 | 50 | Animated Captions | AI CAPTIONS & SUBTITLES | pending |
 | 51 | Caption Style Templates | AI CAPTIONS & SUBTITLES | implemented |
-| 52 | Custom Caption Fonts | AI CAPTIONS & SUBTITLES | pending |
+| 52 | Custom Caption Fonts | AI CAPTIONS & SUBTITLES | implemented |
 | 53 | Keyword Highlighting in Captions | AI CAPTIONS & SUBTITLES | pending |
 | 54 | Automatic Emoji Highlights | AI CAPTIONS & SUBTITLES | pending |
 | 55 | Caption Timing Synchronization | AI CAPTIONS & SUBTITLES | implemented |
 | 56 | Caption Text Editing | AI CAPTIONS & SUBTITLES | implemented |
 | 57 | Automatic Profanity Censoring | AI CAPTIONS & SUBTITLES | pending |
 | 58 | Custom Censored-Word Lists | AI CAPTIONS & SUBTITLES | pending |
-| 59 | Brand-Specific Caption Styling | AI CAPTIONS & SUBTITLES | pending |
+| 59 | Brand-Specific Caption Styling | AI CAPTIONS & SUBTITLES | implemented |
 | 60 | AI Speech Enhancement | AI AUDIO PROCESSING | pending |
 | 61 | Background Noise Reduction | AI AUDIO PROCESSING | implemented |
 | 62 | Automatic Silence Removal | AI AUDIO PROCESSING | implemented |
@@ -116,11 +116,11 @@ Machine-readable detail, including dependencies and conflict notes, is in [featu
 | 67 | AI Video Dubbing | AI AUDIO PROCESSING | blocked |
 | 68 | AI Sound Effects Generation | AI AUDIO PROCESSING | blocked |
 | 69 | Custom Brand Templates | BRANDING & CUSTOMIZATION | pending |
-| 70 | Custom Brand Colors | BRANDING & CUSTOMIZATION | pending |
-| 71 | Custom Logo Integration | BRANDING & CUSTOMIZATION | pending |
+| 70 | Custom Brand Colors | BRANDING & CUSTOMIZATION | implemented |
+| 71 | Custom Logo Integration | BRANDING & CUSTOMIZATION | implemented |
 | 72 | Branded Intro Cards | BRANDING & CUSTOMIZATION | pending |
 | 73 | Branded Outro Cards | BRANDING & CUSTOMIZATION | pending |
-| 74 | Custom Font Uploads | BRANDING & CUSTOMIZATION | pending |
+| 74 | Custom Font Uploads | BRANDING & CUSTOMIZATION | implemented |
 | 75 | Brand Vocabulary Customization | BRANDING & CUSTOMIZATION | pending |
 | 76 | Custom Media Library | BRANDING & CUSTOMIZATION | scope-conflict |
 | 77 | Project Renaming | BRANDING & CUSTOMIZATION | implemented |

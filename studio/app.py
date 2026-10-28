@@ -5,6 +5,7 @@ from threading import Event, RLock, Thread
 import hmac
 import json
 import os
+import re
 import secrets
 import shutil
 import time
@@ -54,6 +55,36 @@ class Export(BaseModel):
     text: str = Field(default='', max_length=500)
     captions: list[Caption] = Field(default_factory=list, max_length=500)
     caption_style: str = 'clean'
+    transition: str = 'none'
+    caption_color: str = '#FFFFFF'
+    caption_background: str = '#000000'
+    text_color: str = '#FFFFFF'
+    music_asset_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{32}$')
+    logo_asset_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{32}$')
+    font_asset_id: str | None = Field(default=None, pattern=r'^[a-f0-9]{32}$')
+    music_volume: float = Field(default=.2, ge=0, le=1, allow_inf_nan=False)
+    logo_position: str = 'top-right'
+
+    @field_validator('caption_color', 'caption_background', 'text_color')
+    @classmethod
+    def color_valid(cls, value):
+        if not re.fullmatch(r'#[0-9a-fA-F]{6}', value):
+            raise ValueError('Choose a six-digit hexadecimal color.')
+        return value.upper()
+
+    @field_validator('transition')
+    @classmethod
+    def transition_valid(cls, value):
+        if value not in ('none', 'fade'):
+            raise ValueError('Choose no transition or a short fade.')
+        return value
+
+    @field_validator('logo_position')
+    @classmethod
+    def logo_position_valid(cls, value):
+        if value not in ('top-left', 'top-right', 'bottom-left', 'bottom-right'):
+            raise ValueError('Choose one of the four logo corners.')
+        return value
 
     @field_validator('aspect')
     @classmethod
@@ -121,7 +152,7 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
     export_reservations = {}
 
     def project_public(p):
-        result = {k: v for k, v in p.items() if k not in ('source', 'directory')}
+        result = {k: v for k, v in p.items() if k not in ('source', 'directory') and not k.startswith('_')}
         with jobs.lock:
             result['active_job'] = next((j.public() for j in jobs.entries.values()
                                         if j.project_id == p['id'] and j.status in ('queued', 'running')), None)
@@ -286,6 +317,7 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
             directory = media_root / project_id
             directory.mkdir(mode=0o700)
             project = {'id': project_id, 'name': name, 'url': url, 'media': None, 'clips': [],
+                       'assets': [], '_asset_files': {}, '_asset_pending': set(),
                        'transcript': [], 'edits': None, 'created_at': time.time(),
                        'expires_at': time.time() + TTL, 'directory': directory, 'source': None}
             projects[project_id] = project
@@ -387,6 +419,67 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
     def get_project(project_id: str):
         return project_public(project_get(project_id))
 
+    @app.post('/api/projects/{project_id}/assets/{kind}', status_code=202)
+    async def upload_asset(project_id: str, kind: str, file: UploadFile = File(...)):
+        project = project_get(project_id)
+        if kind not in ('logo', 'music', 'font'):
+            await file.close()
+            raise HTTPException(422, 'Choose a logo image, background music, or a custom font.')
+        asset_id = uuid.uuid4().hex
+        with state_lock:
+            if len(project['assets']) + len(project['_asset_pending']) >= 10:
+                await file.close()
+                raise HTTPException(429, 'Maximum 10 temporary assets per project.')
+            project['_asset_pending'].add(asset_id)
+        directory = project['directory'] / 'assets' / asset_id
+        directory.mkdir(parents=True, mode=0o700)
+        incoming = directory / 'input.bin'
+
+        def finalize(job):
+            with state_lock:
+                project['_asset_pending'].discard(asset_id)
+                if job is None or job.status in ('failed', 'cancelled'):
+                    project['_asset_files'].pop(asset_id, None)
+                    project['assets'] = [asset for asset in project['assets'] if asset['id'] != asset_id]
+                    shutil.rmtree(directory, ignore_errors=True)
+        try:
+            total = 0
+            with incoming.open('wb') as target:
+                while chunk := await file.read(1024 * 1024):
+                    total += len(chunk)
+                    if total > 25 * 1024 * 1024:
+                        raise HTTPException(413, 'Maximum asset size is 25 MB (5 MB for fonts).')
+                    with state_lock:
+                        if used_bytes() + len(export_reservations) * (MAX_UPLOAD // 2) + len(chunk) > 2 * MAX_UPLOAD:
+                            raise HTTPException(507, 'Temporary storage is full. Clear a project first.')
+                    target.write(chunk)
+            if not total:
+                raise HTTPException(422, 'Choose a non-empty media asset.')
+        except Exception:
+            finalize(None)
+            raise
+        finally:
+            await file.close()
+
+        def task(job, progress):
+            from .assets import prepare_asset
+            try:
+                prepared = prepare_asset(incoming, directory, kind, job.cancel_event.is_set)
+                with state_lock:
+                    project['_asset_files'][asset_id] = prepared['path']
+                    project['assets'].append({'id': asset_id, 'kind': kind,
+                                              'name': Path(file.filename or kind).name[:100],
+                                              **{key: value for key, value in prepared.items()
+                                                 if key not in ('path', 'kind', 'name')}})
+            finally:
+                incoming.unlink(missing_ok=True)
+        try:
+            job = jobs.submit('asset-upload', project_id, task, finalize)
+        except ValueError as exc:
+            finalize(None)
+            raise HTTPException(429, str(exc)) from exc
+        return {'job_id': job['id']}
+
     @app.patch('/api/projects/{project_id}')
     def update_project(project_id: str, payload: Rename):
         project = project_get(project_id)
@@ -413,6 +506,10 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
     def validate_export(project, payload):
         if not project['media']:
             raise HTTPException(409, 'Wait for video inspection to finish.')
+        for kind in ('music', 'logo', 'font'):
+            asset_id = getattr(payload, f'{kind}_asset_id')
+            if asset_id and not any(asset['id'] == asset_id and asset['kind'] == kind for asset in project['assets']):
+                raise HTTPException(422, f'The selected {kind} asset does not belong to this project.')
         for segment in payload.segments:
             if segment.end <= segment.start or segment.end > project['media']['duration'] + .01:
                 raise HTTPException(422, 'Each segment must start before its end and stay inside the source.')
@@ -439,7 +536,12 @@ def create_app(data_dir: Path | None = None, password: str | None = None):
 
         def task(job, progress):
             try:
-                render(project['source'], output, payload.model_dump(), progress, job.cancel_event.is_set)
+                options = payload.model_dump()
+                for kind in ('music', 'logo', 'font'):
+                    asset_id = getattr(payload, f'{kind}_asset_id')
+                    if asset_id:
+                        options[f'{kind}_path'] = project['_asset_files'][asset_id]
+                render(project['source'], output, options, progress, job.cancel_event.is_set)
                 media = probe(output)
                 if job.cancel_event.is_set():
                     from .media import Cancelled

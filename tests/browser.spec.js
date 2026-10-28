@@ -3,7 +3,7 @@ const { execFileSync } = require('node:child_process');
 const { mkdtempSync, rmSync, readFileSync } = require('node:fs');
 const { tmpdir } = require('node:os');
 const { join } = require('node:path');
-let mediaDir, video;
+let mediaDir, video, logo, music;
 let ownedProjects = new Set(), ownedJobs = new Set();
 test.beforeEach(() => { ownedProjects = new Set(); ownedJobs = new Set(); });
 test.afterEach(async ({ page }) => {
@@ -18,6 +18,9 @@ test.beforeAll(() => {
   video = join(mediaDir, 'example.mp4');
   execFileSync('ffmpeg', ['-v','error','-f','lavfi','-i','testsrc2=size=320x240:rate=24',
     '-f','lavfi','-i','sine=frequency=440','-t','3','-c:v','libx264','-pix_fmt','yuv420p','-c:a','aac', video]);
+  logo = join(mediaDir, 'logo.png'); music = join(mediaDir, 'music.wav');
+  execFileSync('ffmpeg', ['-v','error','-f','lavfi','-i','color=c=red:s=80x80', '-frames:v','1','-threads','1', logo]);
+  execFileSync('ffmpeg', ['-v','error','-f','lavfi','-i','sine=frequency=880', '-t','2', music]);
 });
 test.afterAll(() => { if (mediaDir) rmSync(mediaDir, { recursive: true, force: true }); });
 async function openStudio(page) {
@@ -135,4 +138,66 @@ test('refresh while an import is queued restores progress and completes safely',
   await expect(page.getByLabel('Clip end 1')).toBeVisible({ timeout: 30000 });
   expect(await page.evaluate(() => sessionStorage.getItem('studio-project'))).not.toBe(previous);
   expect(errors).toEqual([]);
+});
+test('temporary logo, music and font assets render into a downloadable branded clip', async ({ page }) => {
+  await openStudio(page); await uploadVideo(page);
+  await page.getByLabel('Clip end 1').fill('1.2');
+  await page.getByLabel('Clip end 1').blur();
+  await expect(page.getByText('Branding & media', { exact: true })).toBeVisible();
+  await page.getByText('Branding & media', { exact: true }).click();
+  for (const [label, file, selectLabel, option] of [
+    ['Upload logo image', logo, 'Logo image', 'logo.png'],
+    ['Upload background music', music, 'Background music', 'music.wav'],
+    ['Upload custom font', '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 'Caption and overlay font', 'DejaVuSans.ttf']
+  ]) {
+    await page.getByLabel(label, { exact: true }).setInputFiles(file);
+    await expect(page.getByLabel(selectLabel, { exact: true }).getByRole('option', { name: option, exact: true })).toBeAttached({ timeout: 20000 });
+    await page.getByLabel(selectLabel, { exact: true }).selectOption({ label: option });
+  }
+  await page.getByLabel('Logo position').selectOption('bottom-left');
+  await page.getByText('Transitions', { exact: true }).click();
+  await page.getByLabel('Transition').selectOption('fade');
+  await page.getByText('Text & captions', { exact: true }).click();
+  await page.getByLabel('Text overlay', { exact: true }).fill('My branded clip');
+  await page.getByRole('button', { name: 'Add caption', exact: true }).click();
+  await page.getByLabel('Caption text 1', { exact: true }).fill('A clear caption');
+  await page.getByLabel('Caption text color', { exact: true }).fill('#f0b73b');
+  await page.getByText('Audio', { exact: true }).click();
+  await page.getByLabel('Mute original audio', { exact: true }).check();
+  await page.getByRole('button', { name: 'Export clip', exact: true }).click();
+  await expect(page.getByRole('link', { name: 'Download MP4', exact: true })).toBeVisible({ timeout: 50000 });
+  const projectId = await page.evaluate(() => sessionStorage.getItem('studio-project'));
+  const project = await (await page.request.get(`/api/projects/${projectId}`)).json();
+  expect(project.assets).toHaveLength(3);
+  expect(project.clips[0].media.has_audio).toBeTruthy();
+  await expect.poll(() => page.locator('.clip-card video').evaluate(v => v.readyState)).toBeGreaterThanOrEqual(2);
+  await page.reload();
+  await page.getByText('Branding & media', { exact: true }).click();
+  await expect(page.getByLabel('Logo image', { exact: true }).locator('option:checked')).toHaveText('logo.png');
+  await expect(page.getByLabel('Logo position')).toHaveValue('bottom-left');
+  await expect(page.getByLabel('Transition')).toHaveValue('fade');
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByText('Text & captions', { exact: true }).click();
+  await page.getByText('Transitions', { exact: true }).click();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBeTruthy();
+});
+test('refresh during a queued temporary asset upload restores its completion', async ({ page }) => {
+  await openStudio(page); await uploadVideo(page);
+  const projectId = await page.evaluate(() => sessionStorage.getItem('studio-project'));
+  const rendering = await page.request.post(`/api/projects/${projectId}/export`, { data: {
+    segments: Array.from({ length: 20 }, () => ({ start: 0, end: 2.8 })),
+    aspect: '9:16', resolution: 1080, fit: 'contain'
+  }});
+  expect(rendering.status()).toBe(202);
+  const renderJob = (await rendering.json()).job_id; ownedJobs.add(renderJob);
+  await page.getByText('Branding & media', { exact: true }).click();
+  const uploading = page.waitForResponse(response => response.url().endsWith('/assets/logo') && response.request().method() === 'POST');
+  await page.getByLabel('Upload logo image', { exact: true }).setInputFiles(logo);
+  const response = await uploading; expect(response.status()).toBe(202);
+  const assetJob = (await response.json()).job_id; ownedJobs.add(assetJob);
+  await page.reload();
+  await page.getByText('Branding & media', { exact: true }).click();
+  await page.request.post(`/api/jobs/${renderJob}/cancel`);
+  await expect(page.getByLabel('Logo image', { exact: true }).getByRole('option', { name: 'logo.png', exact: true })).toBeAttached({ timeout: 15000 });
+  await expect(page.getByLabel('Upload logo image', { exact: true })).toBeEnabled();
 });

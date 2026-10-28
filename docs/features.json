@@ -206,9 +206,10 @@
     "id": 26,
     "name": "Video Transition Effects",
     "group": "AI VIDEO CLIPPING & EDITING",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Short fades at segment boundaries are implemented and preserve overall timeline duration; no general transition library or generative transitions.",
+    "evidence": "tests/test_media.py::MediaTests.test_fade_transition_starts_black_without_changing_timeline_length; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 27,
@@ -223,17 +224,19 @@
     "id": 28,
     "name": "Custom Media Asset Uploads",
     "group": "AI VIDEO CLIPPING & EDITING",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Temporary raster-logo, background-music and TTF/OTF font uploads are decoded and normalized; no generic asset compositor or permanent media library.",
+    "evidence": "tests/test_assets.py; tests/test_asset_api.py; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 29,
     "name": "Background Music Integration",
     "group": "AI VIDEO CLIPPING & EDITING",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Uploaded background music is normalized, looped to output duration, mixed with source audio at adjustable volume, and can accompany muted/no-audio source video.",
+    "evidence": "tests/test_media.py::MediaTests.test_music_mixes_new_frequency_and_loops_to_full_export_duration; tests/test_media.py::MediaTests.test_music_can_supply_audio_when_source_is_muted; tests/test_asset_api.py; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 30,
@@ -419,9 +422,10 @@
     "id": 52,
     "name": "Custom Caption Fonts",
     "group": "AI CAPTIONS & SUBTITLES",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Uploaded validated TTF/OTF font is used for rendered captions; available glyphs depend on the actual font. Fonts are temporary project assets.",
+    "evidence": "tests/test_media.py::MediaTests.test_caption_color_and_custom_font_change_rendered_pixels; tests/test_asset_api.py::test_actual_asset_is_private_to_its_project; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 53,
@@ -477,9 +481,10 @@
     "id": 59,
     "name": "Brand-Specific Caption Styling",
     "group": "AI CAPTIONS & SUBTITLES",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Caption foreground/background colors, clean/bold style and uploaded font can be customized for the current output. Persistent brand profiles/templates are not implemented.",
+    "evidence": "tests/test_media.py::MediaTests.test_caption_color_and_custom_font_change_rendered_pixels; tests/test_asset_api.py; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 60,
@@ -567,17 +572,19 @@
     "id": 70,
     "name": "Custom Brand Colors",
     "group": "BRANDING & CUSTOMIZATION",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Custom output caption/text colors are validated and applied to rendered pixels. Browser theme accent is separately editable; no persistent brand palette manager.",
+    "evidence": "tests/test_media.py::MediaTests.test_caption_color_and_custom_font_change_rendered_pixels; tests/test_asset_api.py; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 71,
     "name": "Custom Logo Integration",
     "group": "BRANDING & CUSTOMIZATION",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "A decoded raster logo overlays one selected corner of the output, preserves transparency, and expires with the temporary project. SVG is not accepted.",
+    "evidence": "tests/test_media.py::MediaTests.test_logo_appears_only_in_selected_corner; tests/test_media.py::MediaTests.test_logo_music_and_text_can_render_together; tests/test_asset_api.py; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 72,
@@ -599,9 +606,10 @@
     "id": 74,
     "name": "Custom Font Uploads",
     "group": "BRANDING & CUSTOMIZATION",
-    "status": "pending",
-    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
-    "notes": "Required roadmap item; not claimed implemented."
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe, Pillow, fontTools, private application and successfully uploaded project-owned assets.",
+    "notes": "Self-contained TTF/OTF fonts are parsed, validated and normalized before rendering; embedded SVG fonts are rejected and each font is limited to 5 MiB.",
+    "evidence": "tests/test_assets.py::test_real_ttf_font_is_parsed_and_canonicalized; tests/test_asset_api.py::test_actual_asset_is_private_to_its_project; tests/browser.spec.js (real asset upload, render, refresh restoration and mobile acceptance)"
   },
   {
     "id": 75,

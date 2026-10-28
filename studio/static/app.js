@@ -1,6 +1,7 @@
 const $ = (id) => document.getElementById(id);
 const state = { project: null, segments: [], captions: [], jobs: new Map(), sourceJob: null, exportJob: null,
-  capabilities: {}, features: [], saveTimer: null, restoring: false, selectedSegment: 0 };
+  capabilities: {}, features: [], saveTimer: null, restoring: false, selectedSegment: 0,
+  assetJob: null, assetBusy: false, assetUpload: null };
 
 function node(tag, attrs = {}, ...children) {
   const el = document.createElement(tag);
@@ -97,7 +98,12 @@ function collectOptions() {
   return { segments: state.segments.map(({ start, end }) => ({ start, end })), aspect: $('aspect').value,
     resolution: Number($('resolution').value), fit: $('fit').value, mute: $('mute').checked,
     enhance_audio: $('enhance-audio').checked, volume: Number($('volume').value), speed: Number($('speed').value), text: $('overlay-text').value,
-    captions: state.captions.map(c => ({ start: c.start, end: c.end, text: c.text })), caption_style: $('caption-style').value };
+    captions: state.captions.map(c => ({ start: c.start, end: c.end, text: c.text })), caption_style: $('caption-style').value,
+    transition: $('transition').value, caption_color: $('caption-color').value,
+    caption_background: $('caption-background').value, text_color: $('text-color').value,
+    logo_asset_id: $('logo-asset').value || null, music_asset_id: $('music-asset').value || null,
+    font_asset_id: $('font-asset').value || null, logo_position: $('logo-position').value,
+    music_volume: Number($('music-volume').value) };
 }
 function queueSave() {
   if (!state.project || state.restoring) return;
@@ -161,10 +167,50 @@ function applyOptions(options = {}) {
   state.segments = options.segments?.length ? structuredClone(options.segments) : [{ start: 0, end: Math.min(30, state.project.media.duration) }];
   state.captions = structuredClone(options.captions || []);
   for (const [id, key, fallback] of [['aspect', 'aspect', 'original'], ['resolution', 'resolution', '720'], ['fit', 'fit', 'contain'],
-    ['caption-style', 'caption_style', 'clean'], ['overlay-text', 'text', ''], ['volume', 'volume', '1'], ['speed', 'speed', '1']]) $(id).value = options[key] ?? fallback;
+    ['caption-style', 'caption_style', 'clean'], ['overlay-text', 'text', ''], ['volume', 'volume', '1'], ['speed', 'speed', '1'],
+    ['transition', 'transition', 'none'], ['caption-color', 'caption_color', '#ffffff'], ['caption-background', 'caption_background', '#000000'],
+    ['text-color', 'text_color', '#ffffff'], ['logo-position', 'logo_position', 'top-right'], ['music-volume', 'music_volume', '.2'],
+    ['logo-asset', 'logo_asset_id', ''], ['music-asset', 'music_asset_id', ''], ['font-asset', 'font_asset_id', '']]) $(id).value = options[key] ?? fallback;
   $('mute').checked = options.mute || false; $('enhance-audio').checked = options.enhance_audio || false;
   $('volume-value').value = `${Math.round(Number($('volume').value) * 100)}%`;
+  $('music-volume-value').value = `${Math.round(Number($('music-volume').value) * 100)}%`;
   renderSegments(); renderCaptions();
+}
+function renderAssets(assets = []) {
+  for (const kind of ['logo', 'music', 'font']) {
+    const select = $(`${kind}-asset`); const selected = select.value;
+    select.replaceChildren(node('option', { value: '' }, kind === 'font' ? 'Default studio font' : 'None'));
+    for (const asset of assets.filter(item => item.kind === kind)) select.append(node('option', { value: asset.id }, asset.name));
+    select.value = assets.some(asset => asset.id === selected) ? selected : '';
+  }
+  $('asset-count').textContent = `${assets.length} of 10 temporary assets`;
+}
+function setAssetBusy(busy) {
+  state.assetBusy = busy;
+  for (const type of ['logo', 'music', 'font']) $(`${type}-file`).disabled = busy;
+}
+async function trackAssetJob(id, projectId, name = 'Temporary asset') {
+  state.assetJob = id; setAssetBusy(true); $('asset-job').hidden = false;
+  sessionStorage.setItem('studio-asset-job', JSON.stringify({ id, projectId }));
+  try {
+    await watchJob(id, async () => {
+      if (state.project?.id !== projectId) return;
+      const updated = await request(`/api/projects/${projectId}`); state.project.assets = updated.assets;
+      renderAssets(updated.assets || []); $('asset-job-message').textContent = `${name} is ready. Choose it above to apply it.`;
+    });
+  } finally {
+    if (state.assetJob === id) {
+      state.assetJob = null; setAssetBusy(false); $('asset-cancel').hidden = true;
+      sessionStorage.removeItem('studio-asset-job');
+    }
+  }
+}
+function resumeAssetJob(project) {
+  if (state.assetBusy) return;
+  let previous;
+  try { previous = JSON.parse(sessionStorage.getItem('studio-asset-job') || 'null'); } catch { sessionStorage.removeItem('studio-asset-job'); }
+  const job = previous?.projectId === project.id ? previous : project.active_job?.kind === 'asset-upload' ? project.active_job : null;
+  if (job?.id) trackAssetJob(job.id, project.id).catch(error => notify(error.message));
 }
 async function loadProject(id) {
   const project = await request(`/api/projects/${id}`);
@@ -188,8 +234,9 @@ async function loadProject(id) {
   $('project-details').hidden = false; $('edit-empty').hidden = true; $('editor-form').hidden = false;
   $('expiry-info').textContent = project.expires_at ? `Temporary session expires ${dateLabel(project.expires_at)}. Download finished clips before then.` : 'This editing session and its video files are temporary.';
   $('playhead').textContent = `00:00 / ${timeLabel(project.media.duration)}`;
-  applyOptions(project.edits || {}); renderOutputs(project.clips || []); renderTranscript(project.transcript || []); renderDetections(project);
+  renderAssets(project.assets || []); applyOptions(project.edits || {}); renderOutputs(project.clips || []); renderTranscript(project.transcript || []); renderDetections(project);
   state.restoring = false;
+  resumeAssetJob(project);
   if (project.active_job?.kind === 'export' && state.exportJob !== project.active_job.id) {
     const job = project.active_job; state.exportJob = job.id; $('export-button').disabled = true;
     watchJob(job.id, async () => {
@@ -234,7 +281,7 @@ function renderTranscript(transcript) {
   }
 }
 function jobDisplay(job) {
-  const kind = job.kind === 'export' ? 'export' : ['import', 'upload', 'inspect'].includes(job.kind) ? 'source' : null;
+  const kind = job.id === state.assetJob ? 'asset' : job.kind === 'export' ? 'export' : ['import', 'upload', 'inspect'].includes(job.kind) ? 'source' : null;
   if (kind) {
     $(`${kind}-job`).hidden = false;
     $(`${kind}-job-message`).textContent = job.error || job.message || `${job.kind}: ${job.status}`;
@@ -378,6 +425,8 @@ for (const [id, key] of [['mark-in', 'start'], ['mark-out', 'end']]) $(id).addEv
 $('add-caption').addEventListener('click', () => { state.captions.push({ start: 0, end: Math.min(3, duration()), text: '' }); renderCaptions(); queueSave(); });
 $('volume').addEventListener('input', () => { $('volume-value').value = `${Math.round(Number($('volume').value) * 100)}%`; });
 for (const id of ['aspect', 'resolution', 'fit', 'caption-style', 'overlay-text', 'mute', 'enhance-audio', 'volume', 'speed']) $(id).addEventListener('input', queueSave);
+for (const id of ['transition', 'caption-color', 'caption-background', 'text-color', 'logo-asset', 'music-asset', 'font-asset', 'logo-position', 'music-volume']) $(id).addEventListener('input', queueSave);
+$('music-volume').addEventListener('input', () => { $('music-volume-value').value = `${Math.round(Number($('music-volume').value) * 100)}%`; });
 $('speed').addEventListener('input', updateDuration);
 $('editor-form').addEventListener('submit', safely(async (event) => {
   event.preventDefault(); if (!state.project || state.exportJob) return;
@@ -430,6 +479,28 @@ for (const endpoint of ['detect-scenes', 'remove-silence']) $(endpoint).addEvent
   finally { $('detect-scenes').disabled = false; $('remove-silence').disabled = false; }
 }));
 $('clear-history').addEventListener('click', safely(async () => { await request('/api/history', { method: 'DELETE' }); await loadHistory(); }));
+for (const kind of ['logo', 'music', 'font']) $(`${kind}-file`).addEventListener('change', safely(async () => {
+  const input = $(`${kind}-file`); const file = input.files[0]; const projectId = state.project?.id;
+  if (!file || !projectId) return;
+  if (state.assetBusy) { input.value = ''; notify('Wait for the current asset to finish or cancel it first.'); return; }
+  const limit = (kind === 'font' ? 5 : 25) * 1024 ** 2;
+  if (file.size > limit) { input.value = ''; notify(`${kind === 'font' ? 'Fonts' : 'Images and music'} must be no larger than ${limit / 1024 ** 2} MB.`); return; }
+  setAssetBusy(true); state.assetUpload = new AbortController();
+  $('asset-job').hidden = false; $('asset-job-message').textContent = `Uploading ${file.name}…`; $('asset-progress').removeAttribute('value'); $('asset-cancel').hidden = false;
+  try {
+    const data = new FormData(); data.append('file', file);
+    const result = await request(`/api/projects/${projectId}/assets/${kind}`, { method: 'POST', body: data, signal: state.assetUpload.signal });
+    state.assetUpload = null;
+    await trackAssetJob(result.job_id, projectId, file.name);
+  } catch (error) { if (error.name === 'AbortError') $('asset-job-message').textContent = 'Asset upload cancelled.'; else throw error; }
+  finally {
+    setAssetBusy(false); state.assetJob = null; state.assetUpload = null; input.value = ''; $('asset-cancel').hidden = true;
+  }
+}));
+$('asset-cancel').addEventListener('click', safely(async () => {
+  if (state.assetUpload) state.assetUpload.abort();
+  if (state.assetJob) await post(`/api/jobs/${state.assetJob}/cancel`);
+}));
 $('feature-search').addEventListener('input', renderFeatures);
 applyTheme();
 request('/api/session').then(session => session.authenticated ? enterStudio() : showLogin()).catch(error => { showLogin(); $('login-error').textContent = error.message; });

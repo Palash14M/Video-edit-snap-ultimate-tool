@@ -8,6 +8,8 @@ dependencies = [
   "uvicorn==0.38.0",
   "python-multipart==0.0.22",
   "yt-dlp>=2025.1.26",
+  "pillow>=11.3,<13",
+  "fonttools>=4.60,<5",
 ]
 
 [project.optional-dependencies]

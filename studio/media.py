@@ -190,6 +190,23 @@ def _filter_path(path):
     return str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "'\\''")
 
 
+def _color(value, name):
+    if not isinstance(value, str) or not re.fullmatch(r"#[0-9A-Fa-f]{6}", value):
+        raise MediaError(f"{name} must be a six-digit hexadecimal color.")
+    return "0x" + value[1:]
+
+
+def _asset_path(value, name, extensions):
+    if value is None:
+        return None
+    if not isinstance(value, (str, Path)):
+        raise MediaError(f"The selected {name} asset is invalid.")
+    path = Path(value)
+    if path.suffix.lower() not in extensions or not path.is_file() or path.stat().st_size <= 0:
+        raise MediaError(f"The selected {name} asset is missing or unsupported.")
+    return path
+
+
 def render(source: Path, output: Path, options: dict, progress, cancelled) -> None:
     metadata = probe(source)
     segments = options.get("segments")
@@ -216,6 +233,19 @@ def render(source: Path, output: Path, options: dict, progress, cancelled) -> No
     if fit not in ("contain", "cover"):
         raise MediaError("Fit must be contain or cover.")
     volume = _number(options.get("volume", 1), "Volume", 0, 2)
+    transition = options.get("transition", "none")
+    if transition not in ("none", "fade"):
+        raise MediaError("Transition must be none or fade.")
+    caption_color = _color(options.get("caption_color", "#FFFFFF"), "Caption color")
+    caption_background = _color(options.get("caption_background", "#000000"), "Caption background")
+    text_color = _color(options.get("text_color", "#FFFFFF"), "Overlay text color")
+    music_volume = _number(options.get("music_volume", .2), "Music volume", 0, 1)
+    font_path = _asset_path(options.get("font_path"), "font", {".ttf", ".otf"})
+    music_path = _asset_path(options.get("music_path"), "music", {".wav", ".m4a", ".aac", ".mp3", ".flac", ".ogg"})
+    logo_path = _asset_path(options.get("logo_path"), "logo", {".png"})
+    logo_position = options.get("logo_position", "top-right")
+    if logo_position not in ("top-left", "top-right", "bottom-left", "bottom-right"):
+        raise MediaError("Choose a supported logo corner.")
     text = options.get("text", "")
     if not isinstance(text, str) or len(text) > 500:
         raise MediaError("Overlay text must be at most 500 characters.")
@@ -240,9 +270,14 @@ def render(source: Path, output: Path, options: dict, progress, cancelled) -> No
     count = len(intervals)
     filters = []
     for index, (start, end) in enumerate(intervals):
-        filters.append(f"[0:v]trim=start={start}:end={end},setpts=(PTS-STARTPTS)/{speed},setsar=1[v{index}]")
+        segment_duration = (end - start) / speed
+        fade_duration = min(.2, segment_duration / 4)
+        fade_start = max(0, segment_duration - fade_duration)
+        visual_fade = f",fade=t=in:st=0:d={fade_duration},fade=t=out:st={fade_start}:d={fade_duration}" if transition == "fade" else ""
+        audio_fade = f",afade=t=in:st=0:d={fade_duration},afade=t=out:st={fade_start}:d={fade_duration}" if transition == "fade" else ""
+        filters.append(f"[0:v]trim=start={start}:end={end},setpts=(PTS-STARTPTS)/{speed},setsar=1{visual_fade}[v{index}]")
         if audio:
-            filters.append(f"[0:a]atrim=start={start}:end={end},asetpts=PTS-STARTPTS,atempo={speed}[a{index}]")
+            filters.append(f"[0:a]atrim=start={start}:end={end},asetpts=PTS-STARTPTS,atempo={speed}{audio_fade}[a{index}]")
     joined = "".join(f"[v{i}]" + (f"[a{i}]" if audio else "") for i in range(count))
     filters.append(f"{joined}concat=n={count}:v=1:a={int(audio)}[joined]" + ("[audio]" if audio else ""))
     if aspect == "original":
@@ -259,27 +294,46 @@ def render(source: Path, output: Path, options: dict, progress, cancelled) -> No
     with tempfile.TemporaryDirectory(prefix="studio-render-", dir=output.parent) as temp:
         font_size = max(16, round(min(width, height) * .045))
         font = "DejaVu Sans"
+        overlay_font = f"fontfile='{_filter_path(font_path)}'" if font_path else f"font='{font}'"
         if text:
             text_file = Path(temp) / "overlay.txt"
             text_file.write_text(text, encoding="utf-8")
-            visual += f",drawtext=font='{font}':textfile='{_filter_path(text_file)}':expansion=none:fontsize={font_size}:fontcolor=white:box=1:boxcolor=black@0.6:boxborderw=12:x=(w-text_w)/2:y=h*0.08"
+            visual += f",drawtext={overlay_font}:textfile='{_filter_path(text_file)}':expansion=none:fontsize={font_size}:fontcolor={text_color}:box=1:boxcolor=black@0.6:boxborderw=12:x=(w-text_w)/2:y=h*0.08"
         for index, (start, end, line) in enumerate(checked_captions):
             caption_file = Path(temp) / f"caption-{index}.txt"
             caption_file.write_text(line, encoding="utf-8")
             bold = options.get("caption_style") == "bold"
             caption_font = "DejaVu Sans\\:style=Bold" if bold else font
+            caption_font_option = f"fontfile='{_filter_path(font_path)}'" if font_path else f"font='{caption_font}'"
+            custom_bold = f":borderw=1:bordercolor={caption_color}" if font_path and bold else ""
             # drawtext textfiles with expansion disabled preserve literal braces,
             # percent signs and backslashes without evaluating filter markup.
-            visual += f",drawtext=font='{caption_font}':textfile='{_filter_path(caption_file)}':expansion=none:fontsize={font_size}:fontcolor=white:box=1:boxcolor=black@0.7:boxborderw=10:x=(w-text_w)/2:y=h*0.85-text_h:enable='gte(t,{start})*lt(t,{end})'"
-        filters.append(f"[joined]{visual}[video]")
+            visual += f",drawtext={caption_font_option}:textfile='{_filter_path(caption_file)}':expansion=none:fontsize={font_size}:fontcolor={caption_color}:box=1:boxcolor={caption_background}@0.7:boxborderw=10:x=(w-text_w)/2:y=h*0.85-text_h{custom_bold}:enable='gte(t,{start})*lt(t,{end})'"
+        filters.append(f"[joined]{visual}" + ("[composed]" if logo_path else "[video]"))
+        if logo_path:
+            logo_index = 2 if music_path else 1
+            logo_width, logo_height = max(2, width // 5), max(2, height // 5)
+            margin = max(8, round(min(width, height) * .03))
+            x = str(margin) if logo_position.endswith("left") else f"W-w-{margin}"
+            y = str(margin) if logo_position.startswith("top") else f"H-h-{margin}"
+            filters.append(f"[{logo_index}:v]scale={logo_width}:{logo_height}:force_original_aspect_ratio=decrease:flags=lanczos,format=rgba[logo]")
+            filters.append(f"[composed][logo]overlay=x={x}:y={y}:eof_action=repeat:shortest=0[video]")
         if audio:
             audio_filter = f"volume={volume}"
             if options.get("enhance_audio", False):
                 audio_filter += ",highpass=f=80,afftdn=nf=-25,loudnorm=I=-16:TP=-1.5:LRA=11"
-            filters.append(f"[audio]{audio_filter}[sound]")
-        command = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-nostdin", "-y", *INPUT_OPTIONS, "-i", str(source),
-                   "-filter_complex_threads", "1", "-filter_complex", ";".join(filters), "-map", "[video]"]
-        if audio:
+            filters.append(f"[audio]{audio_filter}" + ("[foreground]" if music_path else "[sound]"))
+        if music_path:
+            filters.append(f"[1:a]atrim=start=0:duration={duration},asetpts=PTS-STARTPTS,volume={music_volume}" + ("[background]" if audio else "[sound]"))
+            if audio:
+                filters.append("[foreground][background]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,alimiter=limit=0.95[sound]")
+        command = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-nostdin", "-y", *INPUT_OPTIONS, "-i", str(source)]
+        if music_path:
+            command += ["-stream_loop", "-1", "-protocol_whitelist", "file,pipe", "-format_whitelist", "wav,aac,mov,mp4,m4a,mp3,flac,ogg", "-i", str(music_path)]
+        if logo_path:
+            command += ["-protocol_whitelist", "file,pipe", "-format_whitelist", "png_pipe", "-i", str(logo_path)]
+        command += ["-filter_complex_threads", "1", "-filter_complex", ";".join(filters), "-map", "[video]"]
+        if audio or music_path:
             command += ["-map", "[sound]", "-c:a", "aac", "-b:a", "160k"]
         command += ["-c:v", "libx264", "-preset", "fast", "-crf", "19", "-threads", "2", "-pix_fmt", "yuv420p",
                     "-movflags", "+faststart", "-t", str(duration), "-fs", str(MAX_OUTPUT_BYTES), "-progress", "pipe:1", str(partial)]

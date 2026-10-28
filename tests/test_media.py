@@ -1,5 +1,6 @@
 import json
 import math
+import array
 import subprocess
 import tempfile
 import unittest
@@ -200,6 +201,95 @@ class MediaTests(unittest.TestCase):
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "lavfi", "-i", "color=c=black:s=16x16:r=1:d=601", "-c:v", "libx264", "-threads", "1", str(source)], check=True)
         with self.assertRaises(MediaError):
             render(source, self.output("too-long-export.mp4"), {"segments": [{"start": 0, "end": 601}]}, lambda _: None, lambda: False)
+
+    def decoded_frame(self, path, timestamp="0.5"):
+        return subprocess.run(["ffmpeg", "-v", "error", "-ss", timestamp, "-i", str(path), "-frames:v", "1", "-f", "rawvideo", "-pix_fmt", "rgb24", "pipe:1"], check=True, capture_output=True).stdout
+
+    def test_fade_transition_starts_black_without_changing_timeline_length(self):
+        output = self.output("fade.mp4")
+        render(self.source, output, {"segments": [{"start": 0, "end": 1}, {"start": 2, "end": 3}], "transition": "fade"}, lambda _: None, lambda: False)
+        first = self.decoded_frame(output, "0")
+        middle = self.decoded_frame(output)
+        self.assertLess(max(first[:3]), 15)
+        self.assertGreater(middle[0], 200)
+        self.assertAlmostEqual(probe(output)["duration"], 2, delta=.15)
+
+    def test_caption_color_and_custom_font_change_rendered_pixels(self):
+        font = Path("/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf")
+        self.assertTrue(font.is_file())
+        output = self.output("colored-caption.mp4")
+        render(self.source, output, {"segments": [{"start": 0, "end": 1}], "font_path": font,
+               "captions": [{"start": 0, "end": 1, "text": "Custom caption"}], "caption_color": "#00FF00",
+               "caption_background": "#0000FF", "caption_style": "bold"}, lambda _: None, lambda: False)
+        frame = self.decoded_frame(output)
+        pixels = [frame[index:index+3] for index in range(0, len(frame), 3)]
+        self.assertTrue(any(g > 130 and g > r * 1.5 and g > b * 1.5 for r, g, b in pixels))
+        self.assertTrue(any(b > 100 and b > r * 1.5 and b > g * 1.5 for r, g, b in pixels))
+        default = self.output("default-font-caption.mp4")
+        render(self.source, default, {"segments": [{"start": 0, "end": 1}], "captions": [{"start": 0, "end": 1, "text": "Custom caption"}], "caption_color": "#00FF00", "caption_background": "#0000FF", "caption_style": "bold"}, lambda _: None, lambda: False)
+        self.assertNotEqual(frame, self.decoded_frame(default))
+
+    def test_logo_appears_only_in_selected_corner(self):
+        logo = self.output("logo.png")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=lime:s=64x32", "-frames:v", "1", "-threads", "1", str(logo)], check=True)
+        for corner, x, y in [("top-left", 16, 16), ("bottom-right", 304, 224)]:
+            with self.subTest(corner=corner):
+                output = self.output("logo-" + corner + ".mp4")
+                render(self.source, output, {"segments": [{"start": 0, "end": 1}], "logo_path": logo, "logo_position": corner}, lambda _: None, lambda: False)
+                frame = self.decoded_frame(output)
+                point = (y * 320 + x) * 3
+                r, g, b = frame[point:point+3]
+                self.assertGreater(g, r + 100)
+                opposite = ((240 - y) * 320 + (320 - x)) * 3
+                self.assertGreater(frame[opposite], frame[opposite+1] + 100)
+
+    def test_music_mixes_new_frequency_and_loops_to_full_export_duration(self):
+        music = self.output("music.wav")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "sine=frequency=880:duration=0.25:sample_rate=8000", str(music)], check=True)
+        output = self.output("music-mix.mp4")
+        render(self.source, output, {"segments": [{"start": 0, "end": 2}], "music_path": music, "music_volume": 1}, lambda _: None, lambda: False)
+        raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", "1", "-i", str(output), "-t", "0.25", "-ar", "8000", "-ac", "1", "-f", "s16le", "pipe:1"], check=True, capture_output=True).stdout
+        samples = array.array("h", raw)
+        def energy(frequency):
+            sine = sum(value * math.sin(2 * math.pi * frequency * n / 8000) for n, value in enumerate(samples))
+            cosine = sum(value * math.cos(2 * math.pi * frequency * n / 8000) for n, value in enumerate(samples))
+            return math.hypot(sine, cosine) / len(samples)
+        self.assertGreater(energy(440), 100)
+        self.assertGreater(energy(880), 100)
+        self.assertAlmostEqual(probe(output)["duration"], 2, delta=.15)
+
+    def test_music_can_supply_audio_when_source_is_muted(self):
+        music = self.output("muted-music.wav")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "sine=frequency=880:duration=0.25", str(music)], check=True)
+        output = self.output("muted-music.mp4")
+        render(self.source, output, {"segments": [{"start": 0, "end": 1}], "mute": True, "music_path": music}, lambda _: None, lambda: False)
+        self.assertTrue(probe(output)["has_audio"])
+
+    def test_logo_music_and_text_can_render_together(self):
+        music = self.output("combined-music.wav")
+        logo = self.output("combined-logo.png")
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "sine=frequency=880:duration=0.25", str(music)], check=True)
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "color=c=lime:s=64x32", "-frames:v", "1", "-threads", "1", str(logo)], check=True)
+        output = self.output("combined-branding.mp4")
+        render(self.source, output, {"segments": [{"start": 0, "end": 1}], "music_path": music,
+               "logo_path": logo, "logo_position": "bottom-left", "text": "Brand", "text_color": "#00FFFF",
+               "transition": "fade"}, lambda _: None, lambda: False)
+        frame = self.decoded_frame(output)
+        point = (224 * 320 + 16) * 3
+        self.assertGreater(frame[point+1], frame[point] + 100)
+        self.assertTrue(probe(output)["has_audio"])
+        pixels = [frame[index:index+3] for index in range(0, len(frame), 3)]
+        self.assertTrue(any(g > 130 and b > 130 and r < 80 for r, g, b in pixels))
+
+    def test_invalid_branding_options_are_rejected_without_filter_injection(self):
+        invalid_options = [
+            {"caption_color": "red:fontsize=999"}, {"caption_background": "#000000,negate"}, {"text_color": "green"},
+            {"transition": "spin"}, {"logo_position": "x=2"}, {"music_volume": math.nan}, {"music_volume": 2},
+            {"font_path": "/etc/passwd"}, {"logo_path": "/etc/passwd"}, {"music_path": "/etc/passwd"},
+        ]
+        for invalid in invalid_options:
+            with self.subTest(options=invalid), self.assertRaises(MediaError):
+                render(self.source, self.output("invalid-branding.mp4"), {"segments": [{"start": 0, "end": 1}], **invalid}, lambda _: None, lambda: False)
 
 
 if __name__ == "__main__":

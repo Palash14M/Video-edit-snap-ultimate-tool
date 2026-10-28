@@ -16,6 +16,17 @@ The core targets 720p/1080p H.264 MP4 with AAC audio. Media inspection, renderin
 
 Inputs are normalized to a browser-compatible H.264/AAC MP4 preview before editing. Measured scene-cut detection and silence detection can propose source regions; you review and apply those proposals. Silence detection measures low audio energy, not whether a person is speaking. Generated clips can be renamed or downloaded together in a ZIP. Text, captions, frame fit, playback speed, mute/volume and deterministic noise-reduction filters are applied by the real renderer.
 
+## Temporary assets and output branding
+
+The editor supports uploaded logo images, background music and custom fonts. Real-media tests verify rendered pixels and decoded audio; browser acceptance tests cover uploading, selecting, rendering, and restoring temporary assets after refresh.
+
+- Upload a raster logo, music file or self-contained TTF/OTF font to the current temporary project. SVG images and fonts with embedded SVG content are not supported.
+- Choose a logo corner; adjust music volume; use custom caption/text colors and clean/bold caption styling. Uploaded music can loop to fill the exported duration and can be mixed with source audio or accompany a muted source.
+- Select a short fade for segment transitions. A fade does not invent extra source footage or change the requested total timeline duration.
+- Use media and fonts you have permission to use.
+
+Limits: at most 10 assets per temporary project; 25 MiB per raster logo or music upload; 5 MiB per font; 16 million decoded pixels per logo; music duration at most ten minutes. Logos are normalized to PNG, bounded to 2048 pixels in each dimension, and stripped of metadata. Only the first frame of an animated image is used. Music is normalized to AAC, and fonts are validated and reserialized. Assets are restricted to their originating project, count toward temporary storage, and expire or are cleared with it. This does not create a permanent media library or saved brand-template system.
+
 ## Run locally
 
 Prerequisites: Python 3.12 or newer, [uv](https://docs.astral.sh/uv/), and FFmpeg/ffprobe on `PATH`. FFmpeg must include H.264/AAC encoders and `drawtext` support. Install a normal Unicode font such as DejaVu Sans.

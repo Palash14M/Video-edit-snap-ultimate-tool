@@ -164,6 +164,12 @@ video { max-width: 100%; width: 100%; max-height: 500px; height: 100%; object-fi
 .check-field input { width: 16px; height: 16px; }
 #volume-value { float: right; font-size: 11px; color: var(--muted); }
 .ai-tools { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.asset-field { margin-top: 16px; padding-top: 8px; border-top: 1px solid var(--line); }
+.asset-picker { margin-top: 12px; margin-bottom: 8px; min-height: 24px; }
+.asset-field>.fine { margin-top: 8px; font-size: 10px; }
+#asset-count { margin-top: 8px; }
+#music-volume-value { float: right; color: var(--muted); font-size: 11px; }
+.color-fields { margin-top: 8px; }
 #ai-status { margin-top: 8px; font-size: 10px; }
 .transcript-line { display: flex; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); font-size: 12px; }
 .transcript-line button { border: 0; background: transparent; color: var(--accent); font-size: 10px; white-space: nowrap; padding: 0; }

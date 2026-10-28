@@ -51,3 +51,13 @@ The complete implementation/pending/blocked/conflict classification is maintaine
 - Restarted the actual local application using its generated private password and verified health, unauthorized rejection, login, 129 feature entries and an empty transient workspace without printing credentials.
 - External public YouTube import and speech-model host remain unverified because their actual requests returned policy HTTP 403. Saved network changes are a draft, not a running policy change or deployment.
 - Final Docker rebuild passed as UID 10001: unauthorized rejection/login, normalized preview, bold-caption 720×1280 and clean-caption 1920×1080 exports with audio, rename/download filename, scene/silence jobs and a ZIP containing exactly two generated clips. Public deployment remains unperformed.
+
+## Next verified stage: temporary assets and branding
+
+Continued independent work while network access remained blocked. Added normalized raster logos, validated TTF/OTF fonts, normalized background music, custom caption/overlay colors, logo positions, music mixing/volume, and short fades. Assets are private to a temporary project, never a permanent media library. Enforced ten assets per project, 25 MiB uploads (5 MiB fonts), image pixel limits, media-format restrictions and cancellation cleanup.
+
+TDD and verification: 97 backend tests and 38 subtests passed; Ruff and JavaScript syntax checks passed. The independent real Chromium suite passed all seven workflows in 28.6 seconds, including three actual asset uploads, branded video rendering/decoding, audio presence, restored selections, queued asset refresh and expanded mobile controls. Pixel tests verify logos/colors/fonts/fades; decoded audio tests verify music mixing and looping. A fresh read-only review found no new Important or Critical defects and independently checked queued-asset cleanup and extreme logo dimensions.
+
+Coverage at this milestone: 30 implemented, 62 pending, 25 blocked and 12 scope conflicts, preserving every original requirement. The full product remains incomplete. No paid provider or public deployment has been used; the saved network draft remains unapplied in the running instance.
+
+Final phase-two Docker verification passed against the updated code as unprivileged UID 10001: real source/logo/music/font uploads, branded export, normalized source and output playback, project removal, and feature registry counts. Decoded output measured 1.7 seconds at 320×240 with audio; sampled logo pixels were red, and decoded audio contained both the 440 Hz source and 880 Hz background music. No public deployment was performed.
