@@ -1,0 +1,22 @@
+# Optional deployment template, not a deployed/verified service.
+# A free instance may not have sufficient CPU, memory, disk or runtime for videos.
+# Review limits and pricing before deployment; no persistent media disk is needed.
+services:
+  - type: web
+    name: private-short-studio
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    numInstances: 1
+    autoDeploy: false
+    healthCheckPath: /api/health
+    envVars:
+      - key: STUDIO_HOST
+        value: 0.0.0.0
+      - key: STUDIO_DATA_DIR
+        value: /tmp/short-studio
+      # Exact assigned/custom HTTPS origin; configure after hostname is known.
+      - key: STUDIO_PUBLIC_ORIGIN
+        sync: false
+      - key: STUDIO_PASSWORD
+        generateValue: true

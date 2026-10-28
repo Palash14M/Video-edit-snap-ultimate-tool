@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.env
+.runtime/
+node_modules/
+test-results/
+*.pyc
+*.sqlite*
+.coverage
+dist/
+*.egg-info/
+playwright-report/

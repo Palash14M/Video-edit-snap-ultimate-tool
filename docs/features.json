@@ -1,0 +1,1056 @@
+[
+  {
+    "id": 1,
+    "name": "ClipAnything AI",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 2,
+    "name": "Multimodal Video Analysis",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 3,
+    "name": "Visual Scene Recognition",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Partial foundation: hard-cut detection is implemented/tested. Semantic visual scene recognition is not; do not call measured scene cuts multimodal understanding."
+  },
+  {
+    "id": 4,
+    "name": "Speech Recognition",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 5,
+    "name": "Emotion Detection",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 6,
+    "name": "Audio Event Recognition",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 7,
+    "name": "Contextual Video Understanding",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 8,
+    "name": "AI Virality Scoring",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "A prediction needs a stated evaluation basis; no guarantee that a score predicts virality."
+  },
+  {
+    "id": 9,
+    "name": "Automatic Highlight Extraction",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Partial foundation: timestamp-preserving transcript passage grouping and keyword matching are tested. Automatic semantic highlight discovery is not verified and no virality claims are made."
+  },
+  {
+    "id": 10,
+    "name": "AI Copilot",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 11,
+    "name": "Topic-Based Clipping",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 12,
+    "name": "Keyword-Based Clipping",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "A real timed transcript from a working speech model; then validate the complete keyword-to-export workflow.",
+    "notes": "Partial foundation: case-insensitive phrase matching, source timing and maximum duration are tested. Full model-backed input-to-clip workflow remains unavailable."
+  },
+  {
+    "id": 13,
+    "name": "Action-Based Clipping",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 14,
+    "name": "Cross-Scene Highlight Compilation",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 15,
+    "name": "AI Narrative Structuring",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 16,
+    "name": "Automatic Teaser Generation",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 17,
+    "name": "Prompt-Based Clip Refinement",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "pending",
+    "dependency": "Locally available video/audio/language models, model weights, compute resources and real-media evaluation.",
+    "notes": "Use real inference; deterministic heuristics must not be presented as semantic AI or guaranteed virality."
+  },
+  {
+    "id": 18,
+    "name": "Custom Clip Duration",
+    "group": "AI VIDEO UNDERSTANDING & HIGHLIGHT DETECTION",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Segment start/end selection controls exported duration; API rejects invalid or out-of-source timings.",
+    "evidence": "tests/test_media.py::MediaTests.test_reorders_segments_and_preserves_audio; tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 19,
+    "name": "Long-to-Short Video Conversion",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Partial implementation: manual timed segments can convert a longer source into shorter MP4 clips. End-to-end AI selection of the best moments is not yet verified."
+  },
+  {
+    "id": 20,
+    "name": "Automatic Video Segmentation",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Partial implementation: real FFmpeg hard-cut detection returns scene segments for user review. Model-based semantic segmentation and broader automatic editing are not verified."
+  },
+  {
+    "id": 21,
+    "name": "Text-Based Video Editing",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 22,
+    "name": "Timeline-Based Editing",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Timeline selection supports multiple timed segments, ordering, and real FFmpeg render. This is a segment-based editor, not a full multitrack compositing timeline.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download; tests/browser.spec.js"
+  },
+  {
+    "id": 23,
+    "name": "Scene Reordering",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "User-ordered source segments are concatenated into the rendered clip with audio preserved.",
+    "evidence": "tests/test_media.py::MediaTests.test_reorders_segments_and_preserves_audio"
+  },
+  {
+    "id": 24,
+    "name": "Scene Extension",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 25,
+    "name": "Automatic Hook Generation",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 26,
+    "name": "Video Transition Effects",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 27,
+    "name": "Custom Text Overlays",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Custom plain text is burned into real rendered output; escaping protects special characters.",
+    "evidence": "tests/test_media.py::MediaTests.test_square_cover_captions_text_audio_enhancement; tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 28,
+    "name": "Custom Media Asset Uploads",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 29,
+    "name": "Background Music Integration",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 30,
+    "name": "AI B-Roll Generation",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission."
+  },
+  {
+    "id": 31,
+    "name": "Stock B-Roll Integration",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "blocked",
+    "dependency": "Licensed stock-footage source with an actual search/download integration.",
+    "notes": "No stock account or media licence has been verified. Do not ship fabricated results or unlabeled unlicensed media."
+  },
+  {
+    "id": 32,
+    "name": "AI Video B-Roll",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission."
+  },
+  {
+    "id": 33,
+    "name": "AI Video Upscaling",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission."
+  },
+  {
+    "id": 34,
+    "name": "AI Producer",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 35,
+    "name": "Natural-Language Video Editing",
+    "group": "AI VIDEO CLIPPING & EDITING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 36,
+    "name": "Automatic Video Reframing",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Manual aspect-ratio conversion and center crop are implemented. Automatic semantic/subject-aware reframing is not, so this original requirement is not complete."
+  },
+  {
+    "id": 37,
+    "name": "Vertical Video Conversion (9:16)",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Manual 9:16 conversion supports fit/pad and center-crop. It is not AI subject tracking.",
+    "evidence": "tests/test_media.py::MediaTests.test_vertical_contain_and_mute; actual container render verified 720x1280"
+  },
+  {
+    "id": 38,
+    "name": "Square Video Conversion (1:1)",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Manual 1:1 conversion produces square output with selected caption/text/audio options.",
+    "evidence": "tests/test_media.py::MediaTests.test_square_cover_captions_text_audio_enhancement"
+  },
+  {
+    "id": 39,
+    "name": "Horizontal Video Conversion (16:9)",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Manual 16:9 conversion supports fit/pad and center-crop. It is not AI framing.",
+    "evidence": "Real FFmpeg landscape render and ffprobe verified 1920x1080, 2026-10-28"
+  },
+  {
+    "id": 40,
+    "name": "AI Subject Tracking",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 41,
+    "name": "Moving Object Tracking",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 42,
+    "name": "Manual Tracking Control",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 43,
+    "name": "Dynamic Layout Switching",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 44,
+    "name": "Speaker-Focused Framing",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 45,
+    "name": "Gaming Layout Support",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 46,
+    "name": "Genre-Specific Reframing",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 47,
+    "name": "Custom Video Cropping",
+    "group": "AI REFRAMING & VIDEO LAYOUT",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Partial implementation: center crop or contain/pad for fixed aspect ratios. Arbitrary user-positioned crop rectangles are not available."
+  },
+  {
+    "id": 48,
+    "name": "Automatic Caption Generation",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 49,
+    "name": "Multilingual Speech Transcription",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 50,
+    "name": "Animated Captions",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 51,
+    "name": "Caption Style Templates",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Two built-in caption styles, clean and bold, are selectable and rendered through caption font styling.",
+    "evidence": "tests/test_media.py::MediaTests.test_square_cover_captions_text_audio_enhancement"
+  },
+  {
+    "id": 52,
+    "name": "Custom Caption Fonts",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 53,
+    "name": "Keyword Highlighting in Captions",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 54,
+    "name": "Automatic Emoji Highlights",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Emoji effects belong only in exported caption content when explicitly selected, not as decorative application controls."
+  },
+  {
+    "id": 55,
+    "name": "Caption Timing Synchronization",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Editable caption start/end timestamps are applied to the exported clip; timings must fit output duration. Automatic word-level speech alignment remains model-dependent.",
+    "evidence": "tests/test_media.py::MediaTests.test_square_cover_captions_text_audio_enhancement; tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 56,
+    "name": "Caption Text Editing",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Caption text is editable and burned into the output with user-controlled timings.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download; tests/browser.spec.js"
+  },
+  {
+    "id": 57,
+    "name": "Automatic Profanity Censoring",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 58,
+    "name": "Custom Censored-Word Lists",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 59,
+    "name": "Brand-Specific Caption Styling",
+    "group": "AI CAPTIONS & SUBTITLES",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 60,
+    "name": "AI Speech Enhancement",
+    "group": "AI AUDIO PROCESSING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Deterministic FFmpeg filters exist, but no actual learned speech-enhancement model is integrated or verified."
+  },
+  {
+    "id": 61,
+    "name": "Background Noise Reduction",
+    "group": "AI AUDIO PROCESSING",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Deterministic FFmpeg background-noise reduction is available via the audio enhancement control; it is not a learned AI speech enhancement model.",
+    "evidence": "tests/test_media.py::MediaTests.test_square_cover_captions_text_audio_enhancement"
+  },
+  {
+    "id": 62,
+    "name": "Automatic Silence Removal",
+    "group": "AI AUDIO PROCESSING",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Measured silence detection proposes non-silent source regions, and the user approves applying those regions before render. Non-silent audio can include music/noise; this is not speech recognition.",
+    "evidence": "tests/test_detection.py::test_silence_removal_preserves_only_tone_region; tests/test_api.py::test_scene_and_silence_detection_do_not_change_user_timeline"
+  },
+  {
+    "id": 63,
+    "name": "Automatic Filler Word Removal",
+    "group": "AI AUDIO PROCESSING",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 64,
+    "name": "Bad-Take Removal",
+    "group": "AI AUDIO PROCESSING",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 65,
+    "name": "AI Voice-Over Generation",
+    "group": "AI AUDIO PROCESSING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission. Both standard voices and the owner's consented voice clone are requested. Verify voice-model licensing and consent before cloning."
+  },
+  {
+    "id": 66,
+    "name": "Multilingual AI Voice-Over",
+    "group": "AI AUDIO PROCESSING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission. Both standard voices and the owner's consented voice clone are requested. Verify voice-model licensing and consent before cloning."
+  },
+  {
+    "id": 67,
+    "name": "AI Video Dubbing",
+    "group": "AI AUDIO PROCESSING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission. Both standard voices and the owner's consented voice clone are requested. Verify voice-model licensing and consent before cloning."
+  },
+  {
+    "id": 68,
+    "name": "AI Sound Effects Generation",
+    "group": "AI AUDIO PROCESSING",
+    "status": "blocked",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "No verified local generation/upscaling/voice model is configured. Hosted alternatives may require a paid provider; spending remains subject to permission."
+  },
+  {
+    "id": 69,
+    "name": "Custom Brand Templates",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 70,
+    "name": "Custom Brand Colors",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 71,
+    "name": "Custom Logo Integration",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 72,
+    "name": "Branded Intro Cards",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 73,
+    "name": "Branded Outro Cards",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 74,
+    "name": "Custom Font Uploads",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 75,
+    "name": "Brand Vocabulary Customization",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 76,
+    "name": "Custom Media Library",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 77,
+    "name": "Project Renaming",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Rename the current temporary project; only URL history survives expiry/restart.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 78,
+    "name": "Clip Renaming",
+    "group": "BRANDING & CUSTOMIZATION",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Rename a generated clip and use the name in its download filename. Names are temporary session metadata.",
+    "evidence": "tests/test_api.py; studio/app.py::rename_clip"
+  },
+  {
+    "id": 79,
+    "name": "YouTube Shorts Publishing",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 80,
+    "name": "Instagram Reels Publishing",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 81,
+    "name": "TikTok Publishing",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 82,
+    "name": "Social Media Post Scheduling",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 83,
+    "name": "Social Media Content Calendar",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 84,
+    "name": "Multiple Social Account Connections",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 85,
+    "name": "AI Video Title Generation",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 86,
+    "name": "AI Video Description Generation",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 87,
+    "name": "AI Hashtag Generation",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Required roadmap item; not claimed implemented."
+  },
+  {
+    "id": 88,
+    "name": "Social Media Performance Analytics",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 89,
+    "name": "Clip Performance Analytics",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 90,
+    "name": "Automated Publishing Workflows",
+    "group": "SOCIAL MEDIA PUBLISHING & AUTOMATION",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 91,
+    "name": "Collaborative Team Workspace",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 92,
+    "name": "Multiple Team Member Seats",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 93,
+    "name": "Shared Video Projects",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 94,
+    "name": "Automatic Project Saving",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Transient in-session timeline/settings autosave and restoration are implemented. Permanent automatic project saving conflicts with the later URL-history-only retention instruction, so the original feature is not marked complete."
+  },
+  {
+    "id": 95,
+    "name": "Project and Clip Collections",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 96,
+    "name": "Shareable Project Links",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 97,
+    "name": "Cloud Media Storage",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 98,
+    "name": "Sub-Team Management",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 99,
+    "name": "Team Member Permissions",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Latest instructions remove persistent media/project storage and multi-user/team systems. Preserve this original requirement for an explicit future decision; do not silently implement or discard it."
+  },
+  {
+    "id": 100,
+    "name": "Priority Video Processing",
+    "group": "TEAM COLLABORATION & PROJECT MANAGEMENT",
+    "status": "scope-conflict",
+    "dependency": "Reconcile original feature list with later private single-owner and URL-history-only instructions.",
+    "notes": "Multi-user priority service tiers conflict with a single-owner system. A local queue may still support manual ordering, but does not prove this original feature complete."
+  },
+  {
+    "id": 101,
+    "name": "Video Editing API",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Authenticated HTTP editing API exposes project inspection, validated segment edits, background export, progress, cancellation and downloads. Not an externally deployed public API.",
+    "evidence": "tests/test_api.py"
+  },
+  {
+    "id": 102,
+    "name": "AI Video Clipping API",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 103,
+    "name": "Social Media Scheduler API",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "blocked",
+    "dependency": "Official platform developer applications, approved scopes, owner OAuth authorization, scheduler persistence, and live platform verification.",
+    "notes": "Download-only is the selected first publishing phase. Do not substitute simulated posts, analytics or scheduling. Provider registration may conflict with the current no-Google-Console requirement."
+  },
+  {
+    "id": 104,
+    "name": "MCP Integration",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "MCP protocol implementation and a verified client connection.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 105,
+    "name": "AI Agent Integration",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "Appropriate local model weights or approved provider, sufficient compute, and real-output evaluation.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 106,
+    "name": "Video Transcript Retrieval",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "blocked",
+    "dependency": "Install a complete licensed local speech model, enable optional faster-whisper, and verify real-media inference.",
+    "notes": "Runtime paths and optional APIs exist, but no actual model-backed transcription has been validated in this environment. Tests of transcript passages or missing-model errors are not proof of working speech inference."
+  },
+  {
+    "id": 107,
+    "name": "Clip Metadata Retrieval",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Authenticated project and clip metadata are returned as actual inspection/render results.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 108,
+    "name": "Programmatic Video Editing",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Programmatic callers can submit timed segments and editing options through the authenticated API.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 109,
+    "name": "Programmatic Video Export",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Programmatic export returns a real background job followed by a downloadable generated MP4.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 110,
+    "name": "Zapier Integration",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "Zapier developer connector/account and a real automation test.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 111,
+    "name": "Content Management System Integration",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "Named CMS API, permission and actual import/publication tests.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 112,
+    "name": "Adobe Premiere Pro Export",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "Editor-supported interchange format and verification in the named editor.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 113,
+    "name": "DaVinci Resolve Export",
+    "group": "DEVELOPER API & INTEGRATIONS",
+    "status": "pending",
+    "dependency": "Editor-supported interchange format and verification in the named editor.",
+    "notes": "Later integration phase after the core editor; actual consuming-client interoperability tests are required."
+  },
+  {
+    "id": 114,
+    "name": "Local Video File Upload",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Local file upload inspects actual bytes, normalizes browser preview and respects input/temporary-storage limits. No permanent media library.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download; tests/test_media.py::MediaTests.test_webm_preview_is_browser_h264_aac_mp4"
+  },
+  {
+    "id": 115,
+    "name": "YouTube Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "blocked",
+    "dependency": "Outbound access to YouTube/media endpoints and verified public retrieval; separately a supported authenticated mechanism for private videos.",
+    "notes": "Public yt-dlp import is implemented but the managed environment denies required source domains (HTTP 403), preventing a successful live URL test. Private YouTube remains unsupported; metadata OAuth is not a downloader."
+  },
+  {
+    "id": 116,
+    "name": "Google Drive Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "scope-conflict",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The user explicitly removed Google Drive and Google Console from the design. Original Google Drive import remains recorded for future reconciliation."
+  },
+  {
+    "id": 117,
+    "name": "Vimeo Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 118,
+    "name": "Twitch Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 119,
+    "name": "Zoom Recording Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 120,
+    "name": "Facebook Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 121,
+    "name": "LinkedIn Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 122,
+    "name": "Loom Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 123,
+    "name": "Riverside Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 124,
+    "name": "StreamYard Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 125,
+    "name": "Rumble Video Import",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Source-specific supported retrieval method, network access, source authorization where required, and live source tests.",
+    "notes": "The same public URL strategy does not prove support for every provider or private video. Do not ask for Google/account passwords or copy browser session cookies to the server."
+  },
+  {
+    "id": 126,
+    "name": "Video Download",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Authenticated generated-clip downloads only. Source video is previewed inline but has no explicit full-source download action; preview bytes are not DRM-protected.",
+    "evidence": "tests/test_api.py::test_upload_preview_edit_and_real_clip_download"
+  },
+  {
+    "id": 127,
+    "name": "Bulk Video Clip Export",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "Bulk ZIP download contains generated MP4 clips only and removes the temporary archive after the response.",
+    "evidence": "tests/test_api.py::test_bulk_download_contains_only_generated_clips"
+  },
+  {
+    "id": 128,
+    "name": "Full HD Video Rendering (1080p)",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "implemented",
+    "dependency": "FFmpeg/ffprobe installed, private application running, source successfully imported.",
+    "notes": "1080p export is available through the real FFmpeg renderer; 16:9 output verified at 1920x1080.",
+    "evidence": "Actual FFmpeg export/probe, 2026-10-28; tests/test_media.py"
+  },
+  {
+    "id": 129,
+    "name": "Ultra HD Video Export (4K)",
+    "group": "VIDEO IMPORT & EXPORT",
+    "status": "pending",
+    "dependency": "Local implementation, FFmpeg/media tooling where applicable, and feature-specific integration tests.",
+    "notes": "4K remains in the original roadmap, but the user explicitly accepts 720p–1080p initially. Do not claim that upscaling restores missing detail."
+  }
+]

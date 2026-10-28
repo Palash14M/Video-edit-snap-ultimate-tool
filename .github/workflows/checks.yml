@@ -1,0 +1,30 @@
+name: Check application
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.23'
+      - run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu-core
+      - run: uv sync --frozen --extra dev
+      - run: uv run pytest -q
+      - run: uv run ruff check studio tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Browser workflow tests
+        run: npm run test:browser
+        env:
+          STUDIO_TEST_PASSWORD: ci-test-password-not-a-real-secret
